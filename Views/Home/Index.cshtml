@@ -1,0 +1,73 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+}
+<body>
+    <form>
+        <div>
+            <label>Image Name: </label>
+            <input type="text" class="form-control form-check-inline" id="name" />
+            <input type="file" class="form-control form-check form-check-inline" id="image" />
+            <input type="button" onclick="Addimage()" value="Submit" class="btn btn-default btn-success" />
+        </div>
+        <div>
+            <br />
+        </div>
+    </form>
+    <hr />
+    <table class="table">
+        <thead>
+            <tr>
+                <th>IMAGE NAME</th>
+                <th>IMAGE</th>
+            </tr>
+        </thead>
+        <tbody id="setuser">
+            <tr id="status"></tr>
+        </tbody>
+    </table>
+
+    <script src="~/Scripts/jquery-3.4.1.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            BindData();
+        })
+        function Addimage() {
+
+            var formData = new FormData();
+            formData.append('name', $('#name').val());
+            formData.append('image', $('#image')[0].files[0]);
+            $.ajax({
+                url: 'https://localhost:44344/api/Image',
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (response) {
+                    alert(response);
+                    $('#setuser').empty();
+                    BindData();
+                }
+            });
+        }
+        function BindData() {
+            $.ajax({
+                url: 'https://localhost:44344/api/Image',
+                type: 'GET',
+                success: function (imglist) {
+                    var setdata = $('#setuser');
+
+                    for (var i = 0; i < imglist.length; i++) {
+
+                        var data = "<tr>" +
+                            "<td>" + imglist[i].name + "</td>" +
+                            "<td>" + "<img src='" + imglist[i].image + "' height='100' width='100' />" + "</td>" +
+                            "</tr>";
+
+                        setdata.append(data);
+                        $('#status').html("");
+                    }
+                }
+            });
+        }
+    </script>
+</body>
