@@ -60,12 +60,29 @@
 
                         var data = "<tr>" +
                             "<td>" + imglist[i].name + "</td>" +
-                            "<td>" + "<img src='" + imglist[i].image + "' height='100' width='100' />" + "</td>" +
+                            "<td>" + "<img src='" + imglist[i].image + "' height='100' width='100' />" + "</td>" +                            
                             "</tr>";
 
                         setdata.append(data);
                         $('#status').html("");
                     }
+                }
+            });
+
+        })
+        function Addimage() {
+
+            var formData = new FormData();
+            formData.append('name', $('#name').val());
+            formData.append('image', $('#image')[0].files[0]);
+            $.ajax({
+                url: 'https://localhost:44344/api/Image',
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (response) {
+                    alert(response);
                 }
             });
         }
